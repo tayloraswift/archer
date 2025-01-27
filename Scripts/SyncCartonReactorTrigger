@@ -1,0 +1,37 @@
+#!/bin/sh
+set -e
+
+CARTON_VERSION=$1
+CARTON_LATEST=$(
+curl -s https://api.github.com/repos/swiftwasm/carton/releases/latest | jq -r .tag_name)
+
+if [ -z "$CARTON_VERSION" ]; then
+    echo "Usage: $0 <carton_version>"
+
+    echo "Latest Carton release on GitHub is: $CARTON_LATEST"
+    echo "This script was last tested with Carton version: \
+$(cat Carton/carton-version 2>/dev/null)"
+
+    exit 1
+fi
+
+CARTON_ROOT="https://github.com/swiftwasm/carton/blob/$CARTON_VERSION"
+
+rm -rf Carton
+mkdir Carton
+cd Carton
+
+set -x
+
+git clone https://github.com/swiftwasm/carton
+git -C carton checkout $CARTON_VERSION
+cp -r carton/entrypoint ts
+cp -r carton/LICENSE ts/LICENSE
+rm -rf carton
+echo $CARTON_VERSION > carton-version
+
+cd ..
+
+
+echo "Carton resources downloaded; \
+run 'Scripts/BurnResourcesToSwiftLiteral' to generate Swift code."

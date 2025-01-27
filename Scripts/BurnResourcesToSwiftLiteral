@@ -1,0 +1,70 @@
+#!/bin/sh
+set -e
+
+# Check if the Carton resources have been downloaded
+if [ ! -d "Carton/ts" ]; then
+    echo "Carton resources not found. \
+Please run the 'Scripts/SyncCartonReactorTrigger' script first."
+
+    exit 1
+fi
+
+# Check is npm is installed
+if ! command -v npm 2>&1 > /dev/null; then
+    echo "npm is not installed. Please run 'apt install npm' first."
+    exit 1
+fi
+
+# Check if node modules are installed
+if [ ! -d "node_modules" ]; then
+    echo "Node modules not found. Would you like to install them in this directory? (Y/n)"
+    read -r install_modules
+
+    if [ "$install_modules" = "Y" ]; then
+        npm install
+    else
+        echo "Please run 'npm install' first."
+        exit 1
+    fi
+fi
+
+BURN_SWIFT_TARGET="Sources/archer/_CartonResources.swift"
+
+set -x
+
+esbuild --bundle Carton/ts/bundle.ts \
+    --outfile=Carton/js/resources.js \
+    --format=esm \
+    --minify \
+    --external:node:url \
+    --external:node:path \
+    --external:node:module \
+    --external:node:http \
+    --external:node:fs/promises \
+    --external:node:fs \
+    --external:./JavaScriptKit_JavaScriptKit.resources/Runtime/index.mjs
+
+set +x
+
+(
+cat <<'EOF'
+enum _CartonResources
+{
+    static func js(wasm:String) -> String { """
+EOF
+) > $BURN_SWIFT_TARGET
+
+(
+cat Carton/js/resources.js \
+    | sed 's/\\/\\\\/g' \
+    | sed 's/"""/\\"""/g' \
+    | sed 's/REPLACE_THIS_WITH_THE_MAIN_WEBASSEMBLY_MODULE/\\(wasm)/g'
+) >> $BURN_SWIFT_TARGET
+
+(
+cat <<'EOF'
+""" }
+}
+
+EOF
+) >> $BURN_SWIFT_TARGET

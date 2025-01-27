@@ -1,4 +1,10 @@
 /.build
 /.vscode
 
+/node_modules
+/package-lock.json
+
+/Carton/ts
+/Carton/js
+
 /*.wasm
