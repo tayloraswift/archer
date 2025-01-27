@@ -28,7 +28,7 @@ if [ ! -d "node_modules" ]; then
     fi
 fi
 
-BURN_SWIFT_TARGET="Sources/archer/_CartonResources.swift"
+BURN_SWIFT_TARGET="Sources/archer/_CartonResources (gen).swift"
 
 set -x
 
@@ -48,9 +48,7 @@ set +x
 
 (
 cat <<'EOF'
-enum _CartonResources
-{
-    static func js(wasm:String) -> String { """
+enum _CartonResources { static func js(wasm:String) -> String { """
 EOF
 ) > $BURN_SWIFT_TARGET
 
@@ -63,8 +61,6 @@ cat Carton/js/resources.js \
 
 (
 cat <<'EOF'
-""" }
-}
-
+""" } }
 EOF
 ) >> $BURN_SWIFT_TARGET
