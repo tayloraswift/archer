@@ -4,7 +4,7 @@ set -e
 set -x
 
 # Check that generated files are up-to-date
-Scripts/SyncResources
+Scripts/SyncResources $(cat Carton/carton-version)
 Scripts/BurnResourcesToSwiftLiteral
 
 git diff --exit-code
