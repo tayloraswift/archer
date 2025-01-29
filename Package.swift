@@ -2,6 +2,7 @@
 import PackageDescription
 
 let package:Package = .init(name: "archer",
+    platforms: [.macOS(.v15), .iOS(.v18), .visionOS(.v2)],
     products: [
         .executable(name: "archer", targets: ["ArcherCommands"]),
     ],
