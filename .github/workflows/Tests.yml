@@ -1,0 +1,48 @@
+name: tests
+
+on:
+    push:
+        branches: [ master ]
+    pull_request:
+        branches: [ master ]
+
+jobs:
+    linux:
+        runs-on: ubuntu-24.04
+        name: Ubuntu 24.04
+        steps:
+            -   name: Install Swift
+                uses: tayloraswift/swift-install-action@master
+                with:
+                    swift-prefix: "swift-6.0.3-release/ubuntu2404/swift-6.0.3-RELEASE"
+                    swift-id: "swift-6.0.3-RELEASE-ubuntu24.04"
+
+            -   name: Checkout repository
+                uses: actions/checkout@v3
+
+            -   name: Install WebAssembly SDK
+                run: swift sdk install \
+                https://github.com/swiftwasm/swift/releases/download/\
+                swift-wasm-6.0.2-RELEASE/\
+                swift-wasm-6.0.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip \
+                    --checksum 6ffedb055cb9956395d9f435d03d53ebe9f6a8d45106b979d1b7f53358e1dcb4
+
+            -   name: Run tests
+                run: Scripts/TestAll
+
+    macos:
+        runs-on: macos-15
+        name: macOS
+        steps:
+            -   name: Checkout repository
+                uses: actions/checkout@v3
+
+            -   name: Install WebAssembly SDK
+                run: swift sdk install \
+                https://github.com/swiftwasm/swift/releases/download/\
+                swift-wasm-6.0.2-RELEASE/\
+                swift-wasm-6.0.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip \
+                    --checksum 6ffedb055cb9956395d9f435d03d53ebe9f6a8d45106b979d1b7f53358e1dcb4
+
+            -   name: Run tests
+                run: Scripts/TestAll

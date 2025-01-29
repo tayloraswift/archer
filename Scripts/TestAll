@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+set -x
+
+# Check that generated files are up-to-date
+Scripts/SyncResources
+Scripts/BurnResourcesToSwiftLiteral
+
+git diff --exit-code
+

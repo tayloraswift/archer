@@ -4,7 +4,7 @@ set -e
 # Check if the Carton resources have been downloaded
 if [ ! -d "Carton/ts" ]; then
     echo "Carton resources not found. \
-Please run the 'Scripts/SyncCartonReactorTrigger' script first."
+Please run the 'Scripts/SyncResources' script first."
 
     exit 1
 fi
