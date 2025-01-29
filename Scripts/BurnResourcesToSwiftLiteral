@@ -64,3 +64,9 @@ cat <<'EOF'
 """ } }
 EOF
 ) >> $BURN_SWIFT_TARGET
+
+# Make sure we successfully embedded the string interpolation
+if ! grep -q '\\(wasm)' "$BURN_SWIFT_TARGET"; then
+    echo "Failed to construct format string, it’s possible the magic string has changed"
+    exit 1
+fi
