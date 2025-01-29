@@ -25,6 +25,8 @@ archer init -m $RUNTIME_NAME -w $WASM_NAME -o Bundle
 archer crush .build/release/Hello.wasm -o Bundle/$WASM_NAME
 
 # Generate an HTML stub to preview the example
+set +x
+
 (
 cat <<EOF
 <!DOCTYPE html>
