@@ -7,6 +7,9 @@
 /Carton/ts
 /Carton/js
 
+/Examples/*/.build
+/Examples/*/Package.resolved
+
 /Packages/
 /Package.resolved
 
