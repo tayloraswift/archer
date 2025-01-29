@@ -8,6 +8,7 @@
 /Carton/js
 
 /Examples/*/.build
+/Examples/*/Bundle
 /Examples/*/Package.resolved
 
 /Packages/

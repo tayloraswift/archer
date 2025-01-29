@@ -9,3 +9,10 @@ Scripts/BurnResourcesToSwiftLiteral
 
 git diff --exit-code
 
+swift build -c release
+
+# Add archer to PATH
+export PATH=$PWD/.build/release:$PATH
+
+# Test the example project
+Scripts/TestExample

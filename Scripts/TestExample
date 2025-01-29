@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ -z "$SWIFTWASM_SDK" ]; then
+    echo "Please set SWIFTWASM_SDK to the path of the SwiftWasm toolchain."
+    exit 1
+fi
+
+RUNTIME_NAME="runtime.js"
+WASM_NAME="main.wasm"
+
+set -e
+set -x
+
+cd Examples/Hello
+
+archer version
+
+swift build -c release \
+    --product Hello \
+    --swift-sdk $SWIFTWASM_SDK \
+    -Xswiftc -Xclang-linker -Xswiftc -mexec-model=reactor \
+    -Xlinker --export=__main_argc_argv
+
+archer init -m $RUNTIME_NAME -w $WASM_NAME -o Bundle
+archer crush .build/release/Hello.wasm -o Bundle/$WASM_NAME
+
+# Generate an HTML stub to preview the example
+(
+cat <<EOF
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAssembly Example</title>
+<script type="module" src="$RUNTIME_NAME"></script></head>
+<body>
+    <h1>WebAssembly Example</h1>
+</body>
+</html>
+EOF
+) > Bundle/index.html
