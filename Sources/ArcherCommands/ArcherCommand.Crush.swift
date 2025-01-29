@@ -1,9 +1,3 @@
-#if canImport(Darwin)
-import func Darwin.exit
-#elseif canImport(Glibc)
-import func Glibc.exit
-#endif
-
 import Archer
 import ArgumentParser
 import System_ArgumentParser
@@ -21,7 +15,7 @@ extension ArcherCommand
             name: [.customLong("output"), .customShort("o")],
             help: "Where to write the optimized WebAssembly (wasm) binary",
             completion: .file(extensions: ["wasm"]))
-        var wasmOutput:FilePath
+        var wasmOutput:FilePath = "main.wasm"
 
         @Option(
             name: [.customLong("Xwasm-opt")],
@@ -47,11 +41,7 @@ extension ArcherCommand.Crush:ParsableCommand
             print("""
                 no wasm file provided!
 
-                hint: swift build -c release \\
-                    --product <product> \\
-                    --swift-sdk <wasm sdk> \\
-                    -Xswiftc -Xclang-linker -Xswiftc -mexec-model=reactor \\
-                    -Xlinker --export=__main_argc_argv
+                hint: \(Archer.hintBuild)
                 """)
             Self.exit(withError: ExitCode.failure)
         }
@@ -60,8 +50,9 @@ extension ArcherCommand.Crush:ParsableCommand
             wasmOptimizerFlags: self.wasmOptimizerFlags,
             preserveDebugInfo: self.preserveDebugInfo)
 
-        try crusher.crush(wasm: wasmFile, into: wasmOutput)
-
-        print("output written to \(self.wasmOutput)")
+        if  try crusher.crush(wasm: wasmFile, into: wasmOutput)
+        {
+            print("output written to \(self.wasmOutput)")
+        }
     }
 }
