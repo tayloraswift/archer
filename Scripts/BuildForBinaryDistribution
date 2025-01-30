@@ -1,0 +1,54 @@
+#!/bin/bash
+set -e
+
+SWIFT_VERSION=6.0.3
+
+HOST_ARCH=$(uname -m)
+DEST_ARCH=aarch64
+DEST_OS=noble
+LIBC=gnu
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --os )
+        shift
+
+        case $1 in
+            jammy | noble )
+            DEST_OS=$1
+            shift
+            ;;
+
+            * )
+            echo "Unsupported OS '$1'"
+            exit 1
+            ;;
+        esac
+        ;;
+
+        x86_64 | aarch64)
+        DEST_ARCH=$1
+        shift
+        ;;
+
+        * )
+        echo "Unknown architecture '$1'"
+        exit 1
+        ;;
+    esac
+done
+
+# We actually have to clone the repo, as it contains symlinks that GitHub won’t follow with a
+# simple HTTP GET request.
+git -C swift-cross-aarch64 pull || git clone https://github.com/tayloraswift/swift-cross-aarch64
+
+docker run --rm \
+    -v $PWD:/package \
+    -w /package \
+    tayloraswift/swift-cross-aarch64:${SWIFT_VERSION}-${DEST_OS} \
+    /home/ubuntu/$HOST_ARCH/swift/usr/bin/swift build \
+        --configuration release \
+        --scratch-path .build.$DEST_ARCH \
+        --cache-path /swiftpm \
+        --destination swift-cross-aarch64/Destinations/$HOST_ARCH/$DEST_ARCH-$DEST_OS.json \
+        --static-swift-stdlib

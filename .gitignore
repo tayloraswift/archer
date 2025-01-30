@@ -1,4 +1,5 @@
 /.build
+/.build.*
 /.vscode
 
 /node_modules
@@ -13,5 +14,7 @@
 
 /Packages/
 /Package.resolved
+
+/swift-cross-aarch64
 
 /*.wasm
