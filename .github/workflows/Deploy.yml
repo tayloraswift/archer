@@ -71,7 +71,7 @@ jobs:
                 run: |
                     Scripts/BuildForBinaryDistribution ${{ matrix.arch.id }} \
                         --os ${{ matrix.os.codename }}
-                    tar -czf archer.tar.gz -C .build.${{ matrix.arch.id }} archer
+                    tar -czf archer.tar.gz -C .build.${{ matrix.arch.id }}/release archer
 
             -   name: Upload products
                 env:
