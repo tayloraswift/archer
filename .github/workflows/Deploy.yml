@@ -70,7 +70,7 @@ jobs:
             -   name: Build Archer
                 run: |
                     Scripts/BuildForBinaryDistribution ${{ matrix.arch.id }} \
-                        --os ${{ matrix.os.codename }} \
+                        --os ${{ matrix.os.codename }}
                     tar -czf archer.tar.gz -C .build.${{ matrix.arch.id }} archer
 
             -   name: Upload products
