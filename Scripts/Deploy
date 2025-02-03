@@ -13,7 +13,7 @@ fi
 
 while [[ $# -gt 0 ]]; do
     aws s3 cp $1 \
-        s3://swiftinit/archer/$ARCHER_VERSION/$ARCHER_PLATFORM/$1 \
+        s3://tayloraswift/archer/$ARCHER_VERSION/$ARCHER_PLATFORM/$1 \
         --content-encoding gzip \
         --content-type application/gzip
     shift
