@@ -8,18 +8,18 @@ extension ArcherCommand
     struct Init
     {
         @Option(
-            name: [.customLong("wasm-path"), .customShort("w")],
+            name: [.customLong("wasm-path", withSingleDash: true), .customShort("w")],
             help: "Where the browser should load the WebAssembly (wasm) binary from")
         var wasmPath:String = "main.wasm"
 
         @Option(
-            name: [.customLong("js-name"), .customShort("m")],
+            name: [.customLong("js-name", withSingleDash: true), .customShort("m")],
             help: "What to name the generated JavaScript file",
             completion: .file(extensions: ["js"]))
         var jsName:String = "main.js"
 
         @Option(
-            name: [.customLong("js-runtime"), .customShort("J")],
+            name: [.customLong("js-runtime", withSingleDash: true), .customShort("J")],
             help: "Where to find the JavaScriptKit runtime",
             completion: .directory)
         var jsRuntime:FilePath.Directory = """
@@ -27,7 +27,7 @@ extension ArcherCommand
             """
 
         @Option(
-            name: [.customLong("bundle"), .customShort("o")],
+            name: [.customLong("bundle", withSingleDash: true), .customShort("o")],
             help: "Where to write the generated resources to",
             completion: .directory)
         var bundle:FilePath.Directory

@@ -12,19 +12,19 @@ extension ArcherCommand
         var wasmFile:FilePath?
 
         @Option(
-            name: [.customLong("output"), .customShort("o")],
+            name: [.customLong("output", withSingleDash: true), .customShort("o")],
             help: "Where to write the optimized WebAssembly (wasm) binary",
             completion: .file(extensions: ["wasm"]))
         var wasmOutput:FilePath = "main.wasm"
 
         @Option(
-            name: [.customLong("Xwasm-opt")],
+            name: [.customLong("Xwasm-opt", withSingleDash: true)],
             parsing: .unconditionalSingleValue,
             help: "Extra flags to pass to the WebAssembly optimizer")
         var wasmOptimizerFlags:[String] = []
 
         @Flag(
-            name: [.customShort("g"), .customLong("preserve-debug-info")],
+            name: [.customLong("preserve-debug-info", withSingleDash: true), .customShort("g")],
             help: "Whether to preserve debug info or not")
         var preserveDebugInfo:Bool = false
     }
